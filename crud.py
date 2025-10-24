@@ -1,5 +1,3 @@
-from datetime import datetime
-
 animais = {}
 novo_id = 1
 
