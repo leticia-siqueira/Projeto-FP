@@ -1,3 +1,6 @@
+from datetime import datetime
+import os; os.system('cls')
+
 animais = {}
 novo_id = 1
 
@@ -114,6 +117,7 @@ while True:
 
 #----------------------------------------------Sugestões Personalizadas----------------------------------------------------
 
+
 def sugestões_personalizadas(animais):
     while True: 
         confirmação_sugestão = input("Você deseja ver algumas sugestões personalizadas dos animais cadastrados?(s/n): ").lower()
@@ -140,6 +144,7 @@ def sugestões_personalizadas(animais):
             else: 
                 animal = animais[id_sugestão]
                 print(f"Ótimo, agora estamos acessando os dados de {animal['nome']}")
+                print()
 
                 if animal["espécie"] == "cachorro":
 
@@ -149,7 +154,7 @@ def sugestões_personalizadas(animais):
                     elif animal["comportamento"] == "dócil": 
                             print("Existem três pessoas buscando um cachorro dócil, segue o nome deles e telefone para contato: \n" \
                                 "1. Nome: Davi Maltez | 8199999999 \n" \
-                                "2. Nome: Letícia Maria | 818888888 \n " \
+                                "2. Nome: Letícia Maria | 818888888 \n" \
                                 "3. Nome: Ariana Grande | 817777777 ")
                     
                     elif animal["comportamento"] == "tímido": 
@@ -234,3 +239,4 @@ def sugestões_personalizadas(animais):
             if continuar == "n":
                 break
 
+sugestões_personalizadas(animais)
