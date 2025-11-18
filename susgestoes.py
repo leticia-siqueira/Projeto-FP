@@ -230,6 +230,24 @@ def sugestões_personalizadas(animais):
                     else:
                         print("Como é um Hamster jovem, ele precisa de uma alimentação rica em proteínas e rotina de brincadeiras diárias")
                         print()
+                elif animal["espécie"] == "gato":
+                    if animal["comportamento"] == "agressivo" or animal["comportamento"] == "raivoso":
+                        print("Parece que temos um gato agressivo por aqui, crie um ambiente enriquecido com esconderijos e arranhadores\n" \
+                        "para que ele redirecione a agressão para brinquedos, e nunca use as mãos para brincar e reforçe comportamentos positivos com petiscos\n")
+                    elif animal["comportamento"] == "agitado":
+                        print("Esse gatinho é um pouco agitado, para acalma-lo crie um ambiente estimulante com arranhadores, prateleiras e brinquedos\n" \
+                        "que simulem a caça, e use também feromônios sintéticos ou ervas naturais como catnip e valeriana\n")
+                    elif animal["comportamento"] == "tímido":
+                        print("Manuseie com cuidado e evite barulhos altos, aos poucos ele irá se acostumar com o dono\n")
+                    elif animal["comportamento"] == "dócil":
+                        print("Temos um gatinho dócil, garanta um ambiente seguro e confortável para ele se manter assim!\n")
+                    
+                    if int(animal["idade"]) > 10:
+                        print("E ele já é um idoso, por isso é essencial fornecer uma alimentação adequada, manter uma torina de exercícios/n" \
+                        "e estimular a mente.\n")
+                    else:
+                        print("Ele é um gatinho jovem, estimule a interação dele com outros animais e compre brinquedos para ele gastar sua energia\n")
+
                 # ------------------- OUTROS ANIMAIS -------------------
                 else:
                     print("Este animal não está entre as espécies listadas, mas seguem recomendações gerais:")
