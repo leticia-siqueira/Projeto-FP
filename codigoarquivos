@@ -1,0 +1,59 @@
+import csv
+import os
+
+def carregar_animais():
+    if not os.path.exists("animais.csv"):
+        return {}
+    animais = {}
+    with open("animais.csv", "r", newline="", encoding="utf-8") as f:
+        leitor = csv.DictReader(f)
+        for linha in leitor:
+            id_animal = int(linha["id"])
+            del linha["id"]
+            animais[id_animal] = linha
+    return animais
+
+def salvar_animais(animais):
+    with open("animais.csv", "w", newline="", encoding="utf-8") as f:
+        campos = ["id"] + list(next(iter(animais.values())).keys()) if animais else ["id","nome","espécie","raça","idade","estado de saúde","comportamento","data de chegada"]
+        escritor = csv.DictWriter(f, fieldnames=campos)
+        escritor.writeheader()
+        for id_animal, dados in animais.items():
+            linha = {"id": id_animal, **dados}
+            escritor.writerow(linha)
+
+def carregar_servicos():
+    if not os.path.exists("servicos.csv"):
+        return []
+    lista = []
+    with open("servicos.csv", "r", newline="", encoding="utf-8") as f:
+        leitor = csv.DictReader(f)
+        for linha in leitor:
+            lista.append(linha)
+    return lista
+
+def salvar_servicos(lista):
+    campos = ["nome_animal", "atividade", "data_prevista", "responsavel"]
+    with open("servicos.csv", "w", newline="", encoding="utf-8") as f:
+        escritor = csv.DictWriter(f, fieldnames=campos)
+        escritor.writeheader()
+        for item in lista:
+            escritor.writerow(item)
+
+def carregar_adocoes():
+    if not os.path.exists("adocoes.csv"):
+        return []
+    lista = []
+    with open("adocoes.csv", "r", newline="", encoding="utf-8") as f:
+        leitor = csv.DictReader(f)
+        for linha in leitor:
+            lista.append(linha)
+    return lista
+
+def salvar_adocoes(lista):
+    campos = ["nome_adotante", "contato", "id_animal", "data"]
+    with open("adocoes.csv", "w", newline="", encoding="utf-8") as f:
+        escritor = csv.DictWriter(f, fieldnames=campos)
+        escritor.writeheader()
+        for item in lista:
+            escritor.writerow(item)
