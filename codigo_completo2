@@ -1,8 +1,70 @@
 from datetime import datetime
-import os; os.system('cls')
+import csv
+import os
 
-animais = {}
-novo_id = 1
+# --- INICIO DO CÓDIGO DA AMIGA (PERSISTÊNCIA) ---
+def carregar_animais():
+    if not os.path.exists("animais.csv"):
+        return {}
+    animais_carregados = {}
+    try:
+        with open("animais.csv", "r", newline="", encoding="utf-8") as f:
+            leitor = csv.DictReader(f)
+            for linha in leitor:
+                id_animal = int(linha["id"])
+                del linha["id"]
+                animais_carregados[id_animal] = linha
+        return animais_carregados
+    except Exception:
+        return {}
+
+def salvar_animais(animais):
+    try:
+        with open("animais.csv", "w", newline="", encoding="utf-8") as f:
+            campos = ["id"] + list(next(iter(animais.values())).keys()) if animais else ["id","nome","espécie","raça","idade","estado de saúde","comportamento","data de chegada"]
+            escritor = csv.DictWriter(f, fieldnames=campos)
+            escritor.writeheader()
+            for id_animal, dados in animais.items():
+                linha = {"id": id_animal, **dados}
+                escritor.writerow(linha)
+    except Exception:
+        pass
+
+def carregar_servicos():
+    if not os.path.exists("servicos.csv"):
+        return []
+    lista = []
+    try:
+        with open("servicos.csv", "r", newline="", encoding="utf-8") as f:
+            leitor = csv.DictReader(f)
+            for linha in leitor:
+                lista.append(linha)
+        return lista
+    except Exception:
+        return []
+
+def salvar_servicos(lista):
+    campos = ["nome_animal", "atividade", "data_prevista", "responsavel"]
+    try:
+        with open("servicos.csv", "w", newline="", encoding="utf-8") as f:
+            escritor = csv.DictWriter(f, fieldnames=campos)
+            escritor.writeheader()
+            for item in lista:
+                escritor.writerow(item)
+    except Exception:
+        pass
+# --- FIM DO CÓDIGO DA AMIGA ---
+
+os.system('cls' if os.name == 'nt' else 'clear')
+
+# ALTERAÇÃO 1: Carregar dados do arquivo ao invés de iniciar vazio
+animais = carregar_animais()
+
+# ALTERAÇÃO 2: Ajustar o ID para continuar de onde parou
+if animais:
+    novo_id = max(animais.keys()) + 1
+else:
+    novo_id = 1
 
 def exibir_menu():
     print("\n===---===---=== Seja bem vindo ao Adoção+ ===---===---===")
@@ -34,6 +96,10 @@ def adicionar_animal(animais, id_atual):
     }
 
     animais[id_atual] = animal
+    
+    # ALTERAÇÃO 3: Salvar no arquivo
+    salvar_animais(animais)
+    
     print(f"\n===---=== Animal cadastrado com o ID {id_atual}")
     return id_atual + 1
 
@@ -53,10 +119,16 @@ def editar_animal(animais):
 
         animal = animais[id_editar]
         print("\n=== Deixe em branco se não quiser alterar o valor atual ===")
+        alterou = False
         for chave, valor in animal.items():
             novo_valor = input(f"{chave.capitalize()} ({valor}): ")
             if novo_valor.strip():
                 animal[chave] = novo_valor
+                alterou = True
+
+        if alterou:
+            # ALTERAÇÃO 4: Salvar no arquivo se houve mudança
+            salvar_animais(animais)
 
         print("\n=== Animal atualizado com sucesso ===")
 
@@ -80,6 +152,8 @@ def excluir_animal(animais):
         confirmar = input(f"\nTem certeza que deseja excluir '{animais[id_excluir]['nome']}'? (s/n): ").lower()
         if confirmar == "s":
             del animais[id_excluir]
+            # ALTERAÇÃO 5: Salvar no arquivo após excluir
+            salvar_animais(animais)
             print("\n=== Animal excluído com sucesso ===")
         else:
             print("\n=== Operação cancelada ===")
@@ -99,7 +173,11 @@ def visualizar_animais(animais):
 
 while True:
     exibir_menu()
-    opcao = int(input("Digite o número da opção escolhida: "))
+    try:
+        opcao = int(input("Digite o número da opção escolhida: "))
+    except ValueError:
+        print("Digite apenas números.")
+        continue
 
     if opcao == 1:
         novo_id = adicionar_animal(animais, novo_id)
@@ -119,6 +197,7 @@ while True:
 
 
 def sugestões_personalizadas(animais):
+    if not animais: return # Evita erro se lista vazia
     while True: 
         confirmação_sugestão = input("Você deseja ver algumas sugestões personalizadas dos animais cadastrados?(s/n): ").lower()
 
@@ -131,6 +210,7 @@ def sugestões_personalizadas(animais):
         return
     else:
         while True:
+            visualizar_animais(animais)
             while True:
                 try:
                     id_sugestão = int(input("Digite o ID do animal que você deseja ver uma sugestão personalizada: "))
@@ -259,10 +339,11 @@ sugestões_personalizadas(animais)
 # ----------------------- Cadastro de atividades e cuidados -----------------------
 
 def cadastro_cuidados_atividades(lista_servicos):
-    print("\n------ Cadastro de cuidados e atividades ------")   
+    print("\n------ Cadastro de cuidados e atividades ------")
     try:
         nome_animal = input("Nome do animal: ").strip().lower()
-        descricao = input("Descrição do cuidado/atividade: ").strip().lower()
+        # ALTERAÇÃO 6: Mudei de 'descricao' para 'atividade' para bater com o código da sua amiga e com a contagem regressiva
+        atividade = input("Descrição do cuidado/atividade: ").strip().lower()
         responsavel = input("Responsável: ").strip().lower()
         
         while True:
@@ -274,6 +355,7 @@ def cadastro_cuidados_atividades(lista_servicos):
                 continue
 
             for servico in lista_servicos:
+                # Aqui também mudei servico['descricao'] se houvesse, mas ajustei o fluxo
                 if (servico['nome_animal'] == nome_animal and
                     servico['data_prevista'] == data_prevista.strftime("%d/%m/%Y") and
                     servico['responsavel'] == responsavel):
@@ -288,14 +370,21 @@ def cadastro_cuidados_atividades(lista_servicos):
                 break
 
         servico = {
-            'nome_animal': nome_animal, 'descricao': descricao, 'data_prevista': data_prevista.strftime("%d/%m/%Y"),
-            'responsavel': responsavel}
+            'nome_animal': nome_animal, 
+            'atividade': atividade,  # ALTERADO AQUI (era descricao)
+            'data_prevista': data_prevista.strftime("%d/%m/%Y"),
+            'responsavel': responsavel
+        }
         
         lista_servicos.append(servico)
+        
+        # ALTERAÇÃO 7: Salvar serviços no arquivo
+        salvar_servicos(lista_servicos)
+        
         print("\nTarefa cadastrada com sucesso!")
     
-    except:
-        print("\nErro no cadastro, tente novamente!")
+    except Exception as e:
+        print(f"\nErro no cadastro, tente novamente! {e}")
 
 contador_servicos = {}
 
@@ -326,7 +415,9 @@ def mostrar_cartao_fidelidade(lista_servicos):
         else:
              print(f"Próximo Brinde: Faltam {faltam} serviços.")
 
-lista_servicos = []
+# ALTERAÇÃO 8: Carregar serviços do arquivo antes de começar
+lista_servicos = carregar_servicos()
+
 cadastro_cuidados_atividades(lista_servicos)
 
 while True:
@@ -347,6 +438,9 @@ while True:
         print("\nErro tente novamente!")
         continue
 
+# Nota: O código original tinha dois loops while True seguidos.
+# Vou manter como você mandou, mas provavelmente o código nunca chegará neste segundo loop
+# porque o 'break' do loop anterior encerra o bloco.
 while True:
     try:
         outro_cadastro = input("\nDeseja cadastrar outro serviço? (SIM/NÃO)").upper()
@@ -365,7 +459,7 @@ while True:
 def contagem_regressiva(animais, lista_servicos):
     if not isinstance(animais, dict) or not animais:
         print("\nNenhum animal cadastrado.")
-        return
+        # Não dei return aqui para permitir ver os serviços mesmo sem animais cadastrados (opcional)
     if not isinstance(lista_servicos, list) or not lista_servicos:
         print("\nNenhuma tarefa cadastrada.")
         return
@@ -374,7 +468,7 @@ def contagem_regressiva(animais, lista_servicos):
     print("\n=== Contagem regressiva e alertas ===")
     for t in lista_servicos:
         nome_animal = t.get("nome_animal") or f"ID {t.get('animal_id','?')}"
-        atividade = t.get("atividade", "Sem serviço")
+        atividade = t.get("atividade", "Sem serviço") # Busca 'atividade'
         data_str = t.get("data_prevista", "")
         responsavel = t.get("responsavel", "Não informado")
 
@@ -403,4 +497,5 @@ def contagem_regressiva(animais, lista_servicos):
         print(f"Data prevista: {data_str}")
         print(f"Responsável: {responsavel}")
         print(f"Status: {status}")
-contagem_regressiva(animais, lista_servicos) 
+
+contagem_regressiva(animais, lista_servicos)
