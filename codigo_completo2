@@ -422,38 +422,20 @@ cadastro_cuidados_atividades(lista_servicos)
 
 while True:
     try:
-        outro_cadastro = input("\nDeseja cadastrar outro serviço? (SIM/NÃO) ou VER FIDELIDADE? ").upper()
-        if outro_cadastro == "SIM":
+        print("\n[1] - Cadastrar outro serviço\n[2] - Ver Fidelidade [3] - Encerrar cadastro de atividade")
+        outro_cadastro = int(input("Digite a opção que você deseja: "))
+        if outro_cadastro == 1:
             cadastro_cuidados_atividades(lista_servicos)
-        elif outro_cadastro == "VER FIDELIDADE":
+        elif outro_cadastro == 2:
             mostrar_cartao_fidelidade(lista_servicos)
-        elif outro_cadastro == "NÃO" or outro_cadastro == "NAO":
-            print("\nObrigada pela preferência!")
-            mostrar_cartao_fidelidade(lista_servicos)
+        elif outro_cadastro == 3:
+            print("\nObrigada pela preferência! Sua atividade foi marcada.")
             break
         else:
             print("\nResposta inválida!")
             continue
     except ValueError:
         print("\nErro tente novamente!")
-        continue
-
-# Nota: O código original tinha dois loops while True seguidos.
-# Vou manter como você mandou, mas provavelmente o código nunca chegará neste segundo loop
-# porque o 'break' do loop anterior encerra o bloco.
-while True:
-    try:
-        outro_cadastro = input("\nDeseja cadastrar outro serviço? (SIM/NÃO)").upper()
-        if outro_cadastro == "SIM":
-            cadastro_cuidados_atividades(lista_servicos)
-        elif outro_cadastro == "NÃO" or outro_cadastro == "NAO":
-            print("\nObrigada pela preferência! Atividade marcada.")
-            break
-        else:
-            print("\nResposta inválida!")
-            continue
-    except ValueError:
-        print("\nErro!")
         continue
 
 def contagem_regressiva(animais, lista_servicos):
