@@ -2,7 +2,6 @@ from datetime import datetime
 import csv
 import os
 
-# --- INICIO DO CÓDIGO DA AMIGA (PERSISTÊNCIA) ---
 def carregar_animais():
     if not os.path.exists("animais.csv"):
         return {}
