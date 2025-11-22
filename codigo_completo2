@@ -53,12 +53,31 @@ def salvar_servicos(lista):
                 escritor.writerow(item)
     except Exception:
         pass
-# --- FIM DO CÓDIGO DA AMIGA ---
+
+def carregar_adocoes():
+    if not os.path.exists("adocoes.csv"):
+        return []
+    lista = []
+    with open("adocoes.csv", "r", newline="", encoding="utf-8") as f:
+        leitor = csv.DictReader(f)
+        for linha in leitor:
+            lista.append(linha)
+    return lista
+
+def salvar_adocoes(lista):
+    campos = ["nome_adotante", "contato", "id_animal", "data"]
+    with open("adocoes.csv", "w", newline="", encoding="utf-8") as f:
+        escritor = csv.DictWriter(f, fieldnames=campos)
+        escritor.writeheader()
+        for item in lista:
+            escritor.writerow(item)
+
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
 # ALTERAÇÃO 1: Carregar dados do arquivo ao invés de iniciar vazio
 animais = carregar_animais()
+lista_adocoes = carregar_adocoes()
 
 # ALTERAÇÃO 2: Ajustar o ID para continuar de onde parou
 if animais:
@@ -73,7 +92,8 @@ def exibir_menu():
     print("2. Editar animal")
     print("3. Excluir animal")
     print("4. Visualizar animais")
-    print("5. Sair")
+    print("5. Registrar Adoção")
+    print("6. Sair")
 
 def adicionar_animal(animais, id_atual):
     print("\n===---=== Adicionar animal ===---===")
@@ -171,6 +191,54 @@ def visualizar_animais(animais):
             for chave, valor in dados.items():
                 print(f"{chave.capitalize()}: {valor}")
 
+# Função de Adoção:
+def registrar_adocao(animais, lista_adocoes):
+    print("\n====== Registrar Adoção ======")
+    
+    if not animais:
+        print("=== Nenhum animal disponível para adoção ===")
+        return
+
+    visualizar_animais(animais)
+    
+    try:
+        id_animal = int(input("\nDigite o ID do animal que será adotado: "))
+        
+        if id_animal not in animais:
+            print("=== ID não encontrado ===")
+            return
+        
+        # Peguei os dados do animal escolhido para confirmar quem está sendo adotado
+        animal = animais[id_animal]
+        print(f"\nAnimal selecionado: {animal['nome']} ({animal['espécie']})")
+        
+
+        nome_adotante = input("Nome do Adotante: ")
+        contato = input("Contato (Telefone/Email): ")
+        data_adocao = datetime.now().strftime("%d/%m/%Y")
+
+        nova_adocao = {
+            "nome_adotante": nome_adotante,
+            "contato": contato,
+            "id_animal": id_animal,
+            "data": data_adocao
+        }
+
+        # Salvo adoção antes de deletar o animal:
+        lista_adocoes.append(nova_adocao)
+        salvar_adocoes(lista_adocoes) 
+
+        # Remove o animal, já que ele foi adotado e salva novamente o arquivo sem esse animal
+        del animais[id_animal]
+        salvar_animais(animais) # Atualiza o arquivo de animais removendo este ID
+
+        print(f"\n=== Sucesso! {animal['nome']} foi adotado por {nome_adotante}! ===")
+        print("=== O animal foi movido para o histórico de adoções ===")
+
+    except ValueError:
+        print("\nEntrada inválida. Digite um número.")
+
+
 while True:
     exibir_menu()
     try:
@@ -188,6 +256,8 @@ while True:
     elif opcao == 4:
         visualizar_animais(animais)
     elif opcao == 5:
+        registrar_adocao(animais,lista_adocoes)
+    elif opcao == 6:    
         break
     else:
         print("\n===---=== Opção inválida ===---===")
@@ -197,9 +267,8 @@ while True:
 
 
 def sugestões_personalizadas(animais):
-    if not animais: return # Evita erro se lista vazia
+    if not animais: return # Evita erro se lista estiver vazia
     while True: 
-        print("\n-------- Sugestões Personalizadas do seu animalzinho -----------")
         confirmação_sugestão = input("Você deseja ver algumas sugestões personalizadas dos animais cadastrados?(s/n): ").lower()
 
         if confirmação_sugestão != "s" and confirmação_sugestão != "n":
@@ -232,13 +301,6 @@ def sugestões_personalizadas(animais):
                     if animal["comportamento"] == "raivoso" or animal["comportamento"] == "agressivo":
                         print("É fortemente recomendado o uso de focinheira ao sair para passear, além disso, a ida a centros de treinamento de cães também é altamente recomenado")
                         print()
-
-                    elif animal["comportamento"] == "dócil": 
-                            print("Existem três pessoas buscando um cachorro dócil, segue o nome deles e telefone para contato: \n" \
-                                "1. Nome: Davi Maltez | 8199999999 \n" \
-                                "2. Nome: Letícia Maria | 818888888 \n" \
-                                "3. Nome: Ariana Grande | 817777777 ")
-                            print()
                     
                     elif animal["comportamento"] == "tímido": 
                         print("Como este cachoro é tímido, atividades de socialização com outros animais não tímidos pode ser interessante")
@@ -273,21 +335,17 @@ def sugestões_personalizadas(animais):
                     elif animal["comportamento"] == "brincalhão":
                         print("Este pássaro brincalhão adora estímulos, forneça brinquedos coloridos, sinos e interações diárias para ele gastar energia")
                         print()
+
                     elif animal["comportamento"] == "tímido":
                         print("Coloque o viveiro em local tranquilo e evite muitas visitas e com o tempo, ele ganhará confiança")
                         print()
 
                     if int(animal["idade"]) > 5:
                         print("Como este pássaro é mais velho, garanta alimentação rica em cálcio e mantenha consultas veterinárias anuais.")
-                        print("Além disso, há algumas pessoas interessadas em adotar pássaros com esta faixa etária: \n" \
-                        "1. Nome: Carol | Telefone: 819999999 \n" \
-                        "2. Nome: Marcelo | Telefone: 818888888")
                         print()
+
                     else:
                         print("Como este pássaro é mais jovem, ofereça sementes variadas e espaço para voar ou se exercitar")
-                        print("Além disso, há algumas pessoas interessadas em adotar pássaros nessa faixa etária: \n" \
-                        "1. Nome: Elon Musk | Telefone: 816666666 \n" \
-                        "2. Nome: Taylor Swift | Telefone: 815555555")
                         print()
 
                 # ------------------- HAMSTERS -------------------
@@ -311,6 +369,29 @@ def sugestões_personalizadas(animais):
                     else:
                         print("Como é um Hamster jovem, ele precisa de uma alimentação rica em proteínas e rotina de brincadeiras diárias")
                         print()
+                
+                # ---------------------GATOS ---------------------------
+
+                elif animal["espécie"] == "gato":
+                    if animal["comportamento"] == "agressivo" or animal["comportamento"] == "raivoso":
+                        print("Parece que temos um gato agressivo por aqui, crie um ambiente enriquecido com esconderijos e arranhadores\n" \
+                        "para que ele redirecione a agressão para brinquedos, e nunca use as mãos para brincar e reforçe comportamentos positivos com petiscos\n")
+
+                    elif animal["comportamento"] == "agitado":
+                        print("Esse gatinho é um pouco agitado, para acalma-lo crie um ambiente estimulante com arranhadores, prateleiras e brinquedos\n" \
+                        "que simulem a caça, e use também feromônios sintéticos ou ervas naturais como catnip e valeriana\n")
+
+                    elif animal["comportamento"] == "tímido":
+                        print("Manuseie com cuidado e evite barulhos altos, aos poucos ele irá se acostumar com o dono\n")
+
+                    elif animal["comportamento"] == "dócil":
+                        print("Temos um gatinho dócil, garanta um ambiente seguro e confortável para ele se manter assim!\n")
+                    
+                    if int(animal["idade"]) > 10:
+                        print("E ele já é um idoso, por isso é essencial fornecer uma alimentação adequada, manter uma torina de exercícios/n" \
+                        "e estimular a mente.\n")
+                    else:
+                        print("Ele é um gatinho jovem, estimule a interação dele com outros animais e compre brinquedos para ele gastar sua energia\n")
                 # ------------------- OUTROS ANIMAIS -------------------
                 else:
                     print("Este animal não está entre as espécies listadas, mas seguem recomendações gerais:")
@@ -360,8 +441,11 @@ def cadastro_cuidados_atividades(lista_servicos):
                 if (servico['nome_animal'] == nome_animal and
                     servico['data_prevista'] == data_prevista.strftime("%d/%m/%Y") and
                     servico['responsavel'] == responsavel):
+
                     print("\nJá existe um serviço marcado para este animal")
+
                     continuar = input("Deseja cadastrar para OUTRA data? (SIM/NÃO) ").upper()
+                    
                     if continuar == "SIM":
                         break 
                     elif continuar == "NAO" or continuar == "NÃO":
