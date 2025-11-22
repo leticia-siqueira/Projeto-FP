@@ -199,6 +199,7 @@ while True:
 def sugestões_personalizadas(animais):
     if not animais: return # Evita erro se lista vazia
     while True: 
+        print("\n-------- Sugestões Personalizadas do seu animalzinho -----------")
         confirmação_sugestão = input("Você deseja ver algumas sugestões personalizadas dos animais cadastrados?(s/n): ").lower()
 
         if confirmação_sugestão != "s" and confirmação_sugestão != "n":
