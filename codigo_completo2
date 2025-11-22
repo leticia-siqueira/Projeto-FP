@@ -422,6 +422,7 @@ cadastro_cuidados_atividades(lista_servicos)
 
 while True:
     try:
+        print("\n--------- Outras opções ------------")
         print("\n[1] - Cadastrar outro serviço\n[2] - Ver Fidelidade [3] - Encerrar cadastro de atividade")
         outro_cadastro = int(input("Digite a opção que você deseja: "))
         if outro_cadastro == 1:
