@@ -2,6 +2,7 @@ from datetime import datetime
 import csv
 import os
 
+# Preenchimento Arquivos
 def carregar_animais():
     if not os.path.exists("animais.csv"):
         return {}
@@ -92,7 +93,8 @@ def exibir_menu():
     print("3. Excluir animal")
     print("4. Visualizar animais")
     print("5. Registrar Adoção")
-    print("6. Sair")
+    print("6. Quiz adoção")
+    print("7. Sair")
 
 def adicionar_animal(animais, id_atual):
     print("\n===---=== Adicionar animal ===---===")
@@ -238,12 +240,63 @@ def registrar_adocao(animais, lista_adocoes):
         print("\nEntrada inválida. Digite um número.")
 
 
+def sugestao_adocao(animais):
+
+    if not animais:
+        print("\nEita, parece que ainda não temos nenhum animal disponível para adoção;-;")
+        return
+    
+    animais_encontrados = []
+    
+    print("\nOlá Cliente, parece que você deseja participar do nosso quiz para saber qual animal combina mais com você")
+    while True:
+        opcao = input("Você deseja começar?(s/n): ").lower()
+
+        if opcao != "s" and opcao != "n":
+        
+            print("Você digitou uma opção inválida\n" \
+            "Digite 's' caso queira fazer o quiz, e 'n' caso não queira" )
+
+            continue
+
+        else:
+            break
+
+    especie = input("\nQue tipo de animal você pensa em adotar?(gato,cachorro,pássaro...): ").lower()
+    comportamento = input("\nVocê quer um animal com que comportamento?: ").lower()
+    while True:
+        try:
+            idade = int(input("\nVocê quer um animal mais ou menos, com quantos anos?: "))
+            break
+
+        except ValueError:
+            print("Apenas números inteiros são permitidos!")
+            continue
+
+    for id_animal,dados in animais.items():
+        encontrar_especie = (especie in dados['espécie']) or (especie == "")
+        encontrar_comportamento = (comportamento in dados['comportamento']) or (comportamento == "")
+        encontrar_idade = (str(idade) in dados['idade']) or (str(idade) == "")
+
+        if encontrar_especie and encontrar_comportamento and encontrar_idade:
+            animais_encontrados.append(dados)
+        
+    if len(animais_encontrados)>0:
+        print(f"Encontramos {len(animais_encontrados)} animais/animal compatívies com você!")
+
+        for animal in animais_encontrados:
+            print(f"\nNome: {animal['nome']} | Raça: {animal['raça']} | Idade: {animal['idade']} | Comportamento: {animal['comportamento']}")
+    else:
+        print("Que pena, parece que não encontramos nenhum pet compatível com o que você selecionou")
+
+
+
 while True:
     exibir_menu()
     try:
         opcao = int(input("Digite o número da opção escolhida: "))
     except ValueError:
-        print("Digite apenas números.")
+        print("Digite apenas números")
         continue
 
     if opcao == 1:
@@ -257,6 +310,8 @@ while True:
     elif opcao == 5:
         registrar_adocao(animais,lista_adocoes)
     elif opcao == 6:    
+        sugestao_adocao(animais)
+    elif opcao == 7:
         break
     else:
         print("\n===---=== Opção inválida ===---===")
@@ -423,7 +478,7 @@ def cadastro_cuidados_atividades(lista_servicos):
     print("\n------ Cadastro de cuidados e atividades ------")
     try:
         nome_animal = input("Nome do animal: ").strip().lower()
-        # ALTERAÇÃO 6: Mudei de 'descricao' para 'atividade' para bater com o código da sua amiga e com a contagem regressiva
+        # ALTERAÇÃO 6: Mudei de 'descricao' para 'atividade' para bater com o código de Malu e com a contagem regressiva
         atividade = input("Descrição do cuidado/atividade: ").strip().lower()
         responsavel = input("Responsável: ").strip().lower()
         
