@@ -75,11 +75,11 @@ def salvar_adocoes(lista):
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
-# ALTERAÇÃO 1: Carregar dados do arquivo ao invés de iniciar vazio
+# Carregar dados do arquivo ao invés de iniciar vazio
 animais = carregar_animais()
 lista_adocoes = carregar_adocoes()
 
-# ALTERAÇÃO 2: Ajustar o ID para continuar de onde parou
+# Ajustar o ID para continuar de onde parou
 if animais:
     novo_id = max(animais.keys()) + 1
 else:
@@ -118,7 +118,7 @@ def adicionar_animal(animais, id_atual):
 
     animais[id_atual] = animal
     
-    # ALTERAÇÃO 3: Salvar no arquivo
+    # Salva no arquivo
     salvar_animais(animais)
     
     print(f"\n===---=== Animal cadastrado com o ID {id_atual}")
@@ -148,7 +148,7 @@ def editar_animal(animais):
                 alterou = True
 
         if alterou:
-            # ALTERAÇÃO 4: Salvar no arquivo se houve mudança
+            # Salva no arquivo se houve mudança
             salvar_animais(animais)
 
         print("\n=== Animal atualizado com sucesso ===")
@@ -266,7 +266,7 @@ def sugestao_adocao(animais):
     comportamento = input("\nVocê quer um animal com que comportamento?: ").lower()
     while True:
         try:
-            idade = int(input("\nVocê quer um animal mais ou menos, com quantos anos?: "))
+            idade = int(input("\nVocê quer um animal mais ou menos, com quantos anos?(obrigatório): "))
             break
 
         except ValueError:
@@ -478,7 +478,7 @@ def cadastro_cuidados_atividades(lista_servicos):
     print("\n------ Cadastro de cuidados e atividades ------")
     try:
         nome_animal = input("Nome do animal: ").strip().lower()
-        # ALTERAÇÃO 6: Mudei de 'descricao' para 'atividade' para bater com o código de Malu e com a contagem regressiva
+        
         atividade = input("Descrição do cuidado/atividade: ").strip().lower()
         responsavel = input("Responsável: ").strip().lower()
         
@@ -491,7 +491,7 @@ def cadastro_cuidados_atividades(lista_servicos):
                 continue
 
             for servico in lista_servicos:
-                # Aqui também mudei servico['descricao'] se houvesse, mas ajustei o fluxo
+                
                 if (servico['nome_animal'] == nome_animal and
                     servico['data_prevista'] == data_prevista.strftime("%d/%m/%Y") and
                     servico['responsavel'] == responsavel):
@@ -510,14 +510,14 @@ def cadastro_cuidados_atividades(lista_servicos):
 
         servico = {
             'nome_animal': nome_animal, 
-            'atividade': atividade,  # ALTERADO AQUI (era descricao)
+            'atividade': atividade,  
             'data_prevista': data_prevista.strftime("%d/%m/%Y"),
             'responsavel': responsavel
         }
         
         lista_servicos.append(servico)
         
-        # ALTERAÇÃO 7: Salvar serviços no arquivo
+        # Salva serviços no arquivo
         salvar_servicos(lista_servicos)
         
         print("\nTarefa cadastrada com sucesso!")
@@ -554,7 +554,7 @@ def mostrar_cartao_fidelidade(lista_servicos):
         else:
              print(f"Próximo Brinde: Faltam {faltam} serviços.")
 
-# ALTERAÇÃO 8: Carregar serviços do arquivo antes de começar
+# Carrega serviços do arquivo antes de começar
 lista_servicos = carregar_servicos()
 
 cadastro_cuidados_atividades(lista_servicos)
@@ -581,7 +581,8 @@ while True:
 def contagem_regressiva(animais, lista_servicos):
     if not isinstance(animais, dict) or not animais:
         print("\nNenhum animal cadastrado.")
-        # Não dei return aqui para permitir ver os serviços mesmo sem animais cadastrados (opcional)
+        return
+
     if not isinstance(lista_servicos, list) or not lista_servicos:
         print("\nNenhuma tarefa cadastrada.")
         return
