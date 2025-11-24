@@ -466,6 +466,12 @@ sugestões_personalizadas(animais)
 def cadastro_cuidados_atividades(lista_servicos):
     print("\n------ Cadastro de cuidados e atividades ------")
     try:
+        id_animal = int(input("Digite o ID do animal: "))
+        if id_animal not in animais:
+            print("Ops! ID não encontrado. Parece que o animalzinho não possui cadastro.\nRealize o cadastro antes de " \
+            "marcar uma atividade!")
+            print("Encerrando programa...")
+            exit()
         nome_animal = input("Nome do animal: ").strip().lower()
         atividade = input("Descrição do cuidado/atividade: ").strip().lower()
         responsavel = input("Responsável: ").strip().lower()
