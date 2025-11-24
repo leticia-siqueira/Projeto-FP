@@ -466,13 +466,13 @@ sugestões_personalizadas(animais)
 def cadastro_cuidados_atividades(lista_servicos):
     print("\n------ Cadastro de cuidados e atividades ------")
     try:
-        nome_animal = input("Nome do animal: ").strip().lower()
-        if nome_animal not in animais:
-            print("Ops! Parece que o animalzinho não possui cadastro.\nRealize o cadastro antes de " \
-            "marcar uma atividade!")
-            print("Encerrando programa...")
-            exit()
-        nome_animal = input("Nome do animal: ").strip().lower()
+        while True:
+            id_animal = int(input("Digite o ID do animal: "))
+            if id_animal not in animais:
+                print("\nEsse ID não está cadastrado, insira um ID válido!")
+            else:
+                break
+        nome_animal = animais[id_animal]["nome"].strip().lower()
         atividade = input("Descrição do cuidado/atividade: ").strip().lower()
         responsavel = input("Responsável: ").strip().lower()
         
@@ -487,7 +487,8 @@ def cadastro_cuidados_atividades(lista_servicos):
             for servico in lista_servicos:
                 if (servico['nome_animal'] == nome_animal and
                     servico['data_prevista'] == data_prevista.strftime("%d/%m/%Y") and
-                    servico['responsavel'] == responsavel):
+                    servico['responsavel'] == responsavel and 
+                    servico['id_animal'] == id_animal):
 
                     print("\nJá existe um serviço marcado para este animal")
 
@@ -502,6 +503,7 @@ def cadastro_cuidados_atividades(lista_servicos):
                 break
 
         servico = {
+            'Id_animal': id_animal,
             'nome_animal': nome_animal, 
             'atividade': atividade,  
             'data_prevista': data_prevista.strftime("%d/%m/%Y"),
