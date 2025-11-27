@@ -1,5 +1,5 @@
 # “Adoção+” – Sistema de Gestão de Centro de Adoção de Animais
-Este é o manual do usuário <br> Aqui presentamos as funcionalidades e como utilizar o sistema Adoção+<br>
+ <br> Aqui presentamos as funcionalidades e como utilizar o sistema Adoção+<br>
 O programa realiza o gerenciamento de animais, atividades, adoções e cuidados especiais. Além disso, os dados são armazenados em arquivos CSV para garantir histórico completo e facilitar consultas.<br>
 O menu principal orienta todas as operações, bastando selecionar pelo número correspondente.<br>
 Entradas inválidas (como IDs inexistentes ou dados de data com formato errado) são tratadas pelo sistema, garantindo retomada do fluxo sem perdas de dados.<br>
