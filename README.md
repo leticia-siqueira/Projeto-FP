@@ -16,9 +16,7 @@ basta deixar o campo em branco para manter os dados antigos.<br>
 
 ## Processo de Adoção
 O sistema incentiva a adoção de animaizinhos!<br>
-- Registrar adoção: Acesse “Registrar Adoção”, selecione o ID do animal  que você deseja, informe seus dados e contato. O animal será removido do cadastro e registrado no histórico de adoções automaticamente<br>
-- Quiz de adoção: O sistema também oferece um quiz interativo para ajudar o usuário a encontrar o animalzinho que mais combina com ele, baseado em critérios como espécie, comportamento e idade.<br>
-<br>
+- Registrar adoção: Acesse “Registrar Adoção”, selecione o ID do animal  que você deseja, informe seus dados e contato. O animal será removido do cadastro e registrado no histórico de adoções automaticamente<br>- Quiz de adoção: O sistema também oferece um quiz interativo para ajudar o usuário a encontrar o animalzinho que mais combina com ele, baseado em critérios como espécie, comportamento e idade.<br>
 
 ## Sugestões Personalizadas
 - A função de sugestões personalizadas permite escolher um animal pelo ID e receber recomendações específicas de manejo e cuidados conforme espécie, comportamento e idade do animal.<br>
@@ -33,6 +31,7 @@ O sistema impede cadastro de duplicatas para o mesmo animal, data e responsável
 ## Contagem regressiva
 - O programa mostra quantos dias faltam para cada tarefa (alerta de vencidas, proximidade ou tarefas do dia), ajudando no controle de rotinas e compromissos! <br>
 <br>
+
 ## Função extra 
 - Nossa função extra conta com quiz para saber qual animalzinho mais combina com você, para voce adotar seu parceiro de vida. Responda as perguntas de acordo com seu gosto e descubra quem está te esperando!
 
