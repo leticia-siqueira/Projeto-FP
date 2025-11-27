@@ -11,23 +11,23 @@ def carregar_animais():
             leitor = csv.DictReader(f)
             for linha in leitor:
                 id_animal = int(linha["id"])
-                del linha["id"]
+                del linha["id"] #deletamos para não ficar duplicado, já que o dictwrite escreve o ID também
                 animais_carregados[id_animal] = linha
         return animais_carregados
-    except Exception:
+    except Exception: #engloba todos os erros genéricos
         return {}
-
+    
 def salvar_animais(animais):
     try:
         with open("animais.csv", "w", newline="", encoding="utf-8") as f:
             campos = ["id"] + list(next(iter(animais.values())).keys()) if animais else ["id","nome","espécie","raça","idade","estado de saúde","comportamento","data de chegada"]
             escritor = csv.DictWriter(f, fieldnames=campos)
-            escritor.writeheader()
+            escritor.writeheader()      
             for id_animal, dados in animais.items():
-                linha = {"id": id_animal, **dados}
+                linha = {"id": id_animal, **dados} # **dados meio que desempacota tudo, ou seja, ele joga o conteúdo do dicionário ali
                 escritor.writerow(linha)
     except Exception:
-        pass
+        pass #"deixe para lá"
 
 def carregar_servicos():
     if not os.path.exists("servicos.csv"):
@@ -43,7 +43,7 @@ def carregar_servicos():
         return []
 
 def salvar_servicos(lista):
-    campos = ["nome_animal", "atividade", "data_prevista", "responsavel"]
+    campos = ["Id_animal","nome_animal", "atividade", "data_prevista", "responsavel"]
     try:
         with open("servicos.csv", "w", newline="", encoding="utf-8") as f:
             escritor = csv.DictWriter(f, fieldnames=campos)
@@ -125,6 +125,7 @@ def editar_animal(animais):
         return
 
     print("\n===---=== Editar Animal ===---===")
+    
     visualizar_animais(animais)
 
     try:
@@ -136,6 +137,7 @@ def editar_animal(animais):
         animal = animais[id_editar]
         print("\n=== Deixe em branco se não quiser alterar o valor atual ===")
         alterou = False
+
         for chave, valor in animal.items():
             novo_valor = input(f"{chave.capitalize()} ({valor}): ")
             if novo_valor.strip():
@@ -253,12 +255,16 @@ def sugestao_adocao(animais):
 
     especie = input("\nQue tipo de animal você pensa em adotar?(gato,cachorro,pássaro...): ").lower()
     comportamento = input("\nVocê quer um animal com que comportamento?: ").lower()
+
     while True:
+
         try:
+
             idade = int(input("\nVocê quer um animal mais ou menos, com quantos anos?: "))
             break
 
         except ValueError:
+
             print("Apenas números inteiros são permitidos!")
             continue
 
@@ -542,16 +548,18 @@ while True:
         continue
 
 def contagem_regressiva(animais, lista_servicos):
-    if not isinstance(animais, dict) or not animais:
+    if not isinstance(animais, dict) or not animais: #isinstance verifica se animais realmente é um dicionário
         print("\nNenhum animal cadastrado.")
-    if not isinstance(lista_servicos, list) or not lista_servicos:
+
+    if not isinstance(lista_servicos, list) or not lista_servicos: 
         print("\nNenhuma tarefa cadastrada.")
         return
 
     hoje = datetime.now()
+
     print("\n=== Contagem regressiva e alertas ===")
-    for t in lista_servicos:
-        nome_animal = t.get("nome_animal") or f"ID {t.get('animal_id','?')}"
+    for t in lista_servicos: #garante
+        nome_animal = t.get("nome_animal") or f"ID {t.get('animal_id','?')}" #cada get funciona como um plano B
         atividade = t.get("atividade", "Sem serviço") 
         data_str = t.get("data_prevista", "")
         responsavel = t.get("responsavel", "Não informado")
