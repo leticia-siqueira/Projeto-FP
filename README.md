@@ -31,7 +31,10 @@ O sistema impede cadastro de duplicatas para o mesmo animal, data e responsável
 <br>
 
 ## Contagem regressiva
-- O programa mostra quantos dias faltam para cada tarefa (alerta de vencidas, proximidade ou tarefas do dia), ajudando no controle de rotinas e compromissos! 
+- O programa mostra quantos dias faltam para cada tarefa (alerta de vencidas, proximidade ou tarefas do dia), ajudando no controle de rotinas e compromissos! <br>
+<br>
+## Função extra 
+- Nossa função extra conta com quiz para saber qual animalzinho mais combina com você, para voce adotar seu parceiro de vida. Responda as perguntas de acordo com seu gosto e descubra quem está te esperando!
 
 
 
