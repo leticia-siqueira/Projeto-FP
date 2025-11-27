@@ -2,6 +2,8 @@ from datetime import datetime
 import csv
 import os   
 
+# Funções de Carregar e Salvar Arquivos
+
 def carregar_animais():
     if not os.path.exists("animais.csv"):
         return {}
@@ -71,16 +73,7 @@ def salvar_adocoes(lista):
         for item in lista:
             escritor.writerow(item)
 
-
-os.system('cls' if os.name == 'nt' else 'clear')
-
-animais = carregar_animais()
-lista_adocoes = carregar_adocoes()
-
-if animais:
-    novo_id = max(animais.keys()) + 1
-else:
-    novo_id = 1
+# Funções do Crud
 
 def exibir_menu():
     print("\n===---===---=== Seja bem vindo ao Adoção+ ===---===---===")
@@ -284,6 +277,19 @@ def sugestao_adocao(animais):
     else:
         print("Que pena, parece que não encontramos nenhum pet compatível com o que você selecionou")
 
+
+#Início do Programa
+
+
+os.system('cls' if os.name == 'nt' else 'clear')
+
+animais = carregar_animais()
+lista_adocoes = carregar_adocoes()
+
+if animais:
+    novo_id = max(animais.keys()) + 1
+else:
+    novo_id = 1
 
 
 while True:
@@ -547,6 +553,8 @@ while True:
         print("\nErro tente novamente!")
         continue
 
+#Função de Contagem regressiva para os serviços
+
 def contagem_regressiva(animais, lista_servicos):
     if not isinstance(animais, dict) or not animais: #isinstance verifica se animais realmente é um dicionário
         print("\nNenhum animal cadastrado.")
@@ -558,7 +566,7 @@ def contagem_regressiva(animais, lista_servicos):
     hoje = datetime.now()
 
     print("\n=== Contagem regressiva e alertas ===")
-    for t in lista_servicos: #garante
+    for t in lista_servicos: #garante que não seja apresentado um KeyError
         nome_animal = t.get("nome_animal") or f"ID {t.get('animal_id','?')}" #cada get funciona como um plano B
         atividade = t.get("atividade", "Sem serviço") 
         data_str = t.get("data_prevista", "")
